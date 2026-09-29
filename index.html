@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Mini Brain Test - Mem Dela</title>
+
+<style>
+body{
+  margin:0;
+  font-family:Arial,sans-serif;
+  background:linear-gradient(135deg,#dff9ff,#eadcff);
+  min-height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  color:#222;
+}
+
+.container{
+  width:92%;
+  max-width:650px;
+  background:white;
+  border-radius:25px;
+  padding:25px;
+  box-shadow:0 10px 30px rgba(0,0,0,.18);
+  text-align:center;
+}
+
+h1{
+  margin:5px 0;
+  font-size:30px;
+}
+
+.from{
+  font-size:18px;
+  font-weight:bold;
+  color:#6c5ce7;
+  margin:8px 0 5px;
+}
+
+.subtitle{
+  color:#666;
+  margin-bottom:18px;
+}
+
+.lights{
+  display:flex;
+  justify-content:center;
+  gap:30px;
+  margin:15px 0;
+}
+
+.light{
+  width:30px;
+  height:30px;
+  border-radius:50%;
+  background:#ddd;
+  box-shadow:0 0 5px #aaa;
+}
+
+.red.on{
+  background:#ff3b30;
+  box-shadow:0 0 25px #ff3b30;
+}
+
+.green.on{
+  background:#22c55e;
+  box-shadow:0 0 25px #22c55e;
+}
+
+#progress{
+  font-weight:bold;
+  margin-bottom:15px;
+}
+
+#question{
+  font-size:22px;
+  font-weight:bold;
+  line-height:1.45;
+  margin:20px 5px;
+}
+
+.answer{
+  display:block;
+  width:100%;
+  padding:15px;
+  margin:10px 0;
+  border:none;
+  border-radius:15px;
+  background:#eef3ff;
+  font-size:18px;
+  font-weight:bold;
+  cursor:pointer;
+}
+
+.answer:hover{
+  background:#dbe5ff;
+}
+
+.answer:disabled{
+  cursor:not-allowed;
+  opacity:.7;
+}
+
+#feedback{
+  min-height:65px;
+  font-size:18px;
+  font-weight:bold;
+  margin-top:15px;
+}
+
+#result{
+  display:none;
+  font-size:24px;
+  font-weight:bold;
+}
+
+.play{
+  padding:14px 25px;
+  border:none;
+  border-radius:15px;
+  background:#6c5ce7;
+  color:white;
+  font-size:18px;
+  font-weight:bold;
+  cursor:pointer;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>🧠 MINI BRAIN TEST</h1>
+
+<div class="from">
+💜 Dari Mem Dela
+</div>
+
+<div class="subtitle">
+Berpikir dulu sebelum menjawab! 😈
+</div>
+
+<div class="lights">
+  <div id="redLight" class="light red"></div>
+  <div id="greenLight" class="light green"></div>
+</div>
+
+<div id="game">
+
+<div id="progress"></div>
+
+<div id="question"></div>
+
+<button class="answer" onclick="answer(0)" id="a0"></button>
+<button class="answer" onclick="answer(1)" id="a1"></button>
+<button class="answer" onclick="answer(2)" id="a2"></button>
+<button class="answer" onclick="answer(3)" id="a3"></button>
+
+<div id="feedback">
+Pilih jawabanmu 👇
+</div>
+
+</div>
+
+<div id="result"></div>
+
+</div>
+
+<script>
+
+const qs = [
+
+[
+"Ayah memiliki 5 anak. Anak pertama bernama Satu, anak kedua Dua, anak ketiga Tiga, anak keempat Empat. Siapa nama anak kelima?",
+["Lima","Satu","Ayah","Tidak diketahui"],2
+],
+
+[
+"Seorang petani memiliki 15 kambing. Semua kecuali 6 kambing pergi. Berapa kambing yang tersisa?",
+["6","9","15","0"],0
+],
+
+[
+"Berapa bulan dalam setahun yang memiliki 28 hari?",
+["1","2","6","12"],3
+],
+
+[
+"Kamu memiliki 5 permen. Kamu mengambil 2 permen. Berapa permen yang kamu miliki?",
+["2","3","5","7"],1
+],
+
+[
+"Seekor ayam jantan bertelur di atas atap. Telurnya jatuh ke arah mana?",
+["Kiri","Kanan","Depan","Ayam jantan tidak bertelur"],3
+],
+
+[
+"Angka berikutnya: 3, 6, 12, 24, ...?",
+["30","36","48","50"],2
+],
+
+[
+"Jika hari ini Jumat, 10 hari lagi hari apa?",
+["Senin","Selasa","Minggu","Rabu"],1
+],
+
+[
+"Mana yang berbeda: 2, 4, 6, 8, 11, 12?",
+["4","8","11","12"],2
+],
+
+[
+"Apa yang semakin diambil justru semakin besar?",
+["Lubang","Batu","Air","Kertas"],0
+],
+
+[
+"Ada 5 burung di pohon. Seorang pemburu menembak satu. Berapa burung yang tersisa di pohon?",
+["4","5","1","0"],3
+],
+
+[
+"Seorang pria berdiri di tengah hujan tanpa payung, tetapi rambutnya tidak basah. Mengapa?",
+["Hujannya sedikit","Dia botak","Dia berlari","Dia berada di rumah"],1
+],
+
+[
+"Mana yang lebih berat: 1 kg kapas atau 1 kg besi?",
+["Kapas","Besi","Sama berat","Tergantung ukurannya"],2
+],
+
+[
+"Jika 5 mesin membuat 5 barang dalam 5 menit, berapa menit 100 mesin membuat 100 barang?",
+["5 menit","20 menit","100 menit","500 menit"],0
+],
+
+[
+"Kamu masuk ruangan gelap. Ada lilin, lampu, dan kompor. Kamu punya satu korek. Apa yang dinyalakan pertama?",
+["Lilin","Lampu","Kompor","Korek"],3
+],
+
+[
+"Dokter memberi 3 pil. Minum satu pil setiap 30 menit. Berapa lama sampai semua pil diminum?",
+["30 menit","60 menit","90 menit","120 menit"],1
+],
+
+[
+"Sebuah pesawat jatuh di perbatasan dua negara. Di mana korban yang selamat dikuburkan?",
+["Negara pertama","Negara kedua","Di perbatasan","Korban selamat tidak dikuburkan"],3
+],
+
+[
+"Seorang ibu memiliki 4 anak perempuan. Setiap anak perempuan memiliki satu saudara laki-laki. Berapa jumlah anak?",
+["4","5","8","9"],1
+],
+
+[
+"Jika kamu menyalip pelari di posisi ketiga, kamu berada di posisi?",
+["Kedua","Ketiga","Keempat","Pertama"],1
+],
+
+[
+"Angka berikutnya: 1, 1, 2, 3, 5, 8, ...?",
+["11","12","13","15"],2
+],
+
+[
+"Ada rumah yang keempat sisinya menghadap ke selatan. Seekor beruang lewat. Apa warna beruang?",
+["Cokelat","Hitam","Putih","Abu-abu"],2
+],
+
+[
+"Apa yang punya leher tetapi tidak punya kepala?",
+["Baju","Botol","Meja","Kursi"],1
+],
+
+[
+"Apa yang selalu datang tetapi tidak pernah sampai?",
+["Besok","Kemarin","Hari ini","Malam"],0
+],
+
+[
+"Jika 3 kucing menangkap 3 tikus dalam 3 menit, berapa kucing yang dibutuhkan untuk menangkap 100 tikus dalam 100 menit?",
+["3","10","33","100"],0
+],
+
+[
+"Seorang
