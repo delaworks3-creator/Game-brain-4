@@ -7,37 +7,42 @@
 <title>Mini Brain Test - Mem Dela</title>
 
 <style>
+*{
+  box-sizing:border-box;
+}
+
 body{
   margin:0;
   font-family:Arial,sans-serif;
-  background:linear-gradient(135deg,#dff9ff,#eadcff);
+  background:linear-gradient(135deg,#dff9ff,#e9ddff);
   min-height:100vh;
   display:flex;
   justify-content:center;
   align-items:center;
+  padding:15px;
   color:#222;
 }
 
-.container{
-  width:92%;
+.box{
+  width:100%;
   max-width:650px;
   background:white;
-  border-radius:25px;
+  border-radius:28px;
   padding:25px;
-  box-shadow:0 10px 30px rgba(0,0,0,.18);
   text-align:center;
+  box-shadow:0 12px 35px rgba(0,0,0,.15);
 }
 
 h1{
-  margin:5px 0;
+  margin:0;
   font-size:30px;
 }
 
 .from{
-  font-size:18px;
-  font-weight:bold;
   color:#6c5ce7;
-  margin:8px 0 5px;
+  font-size:19px;
+  font-weight:bold;
+  margin:10px 0;
 }
 
 .subtitle{
@@ -45,19 +50,24 @@ h1{
   margin-bottom:18px;
 }
 
-.lights{
+.lamps{
   display:flex;
   justify-content:center;
-  gap:30px;
-  margin:15px 0;
+  gap:35px;
+  margin:15px 0 20px;
 }
 
-.light{
-  width:30px;
-  height:30px;
+.lamp{
+  width:32px;
+  height:32px;
   border-radius:50%;
-  background:#ddd;
-  box-shadow:0 0 5px #aaa;
+  background:#d9d9d9;
+  box-shadow:0 2px 8px #aaa;
+}
+
+.green.on{
+  background:#20c968;
+  box-shadow:0 0 25px #20c968;
 }
 
 .red.on{
@@ -65,62 +75,58 @@ h1{
   box-shadow:0 0 25px #ff3b30;
 }
 
-.green.on{
-  background:#22c55e;
-  box-shadow:0 0 25px #22c55e;
-}
-
 #progress{
   font-weight:bold;
+  color:#555;
   margin-bottom:15px;
 }
 
 #question{
-  font-size:22px;
+  font-size:21px;
   font-weight:bold;
   line-height:1.45;
   margin:20px 5px;
 }
 
 .answer{
-  display:block;
   width:100%;
-  padding:15px;
-  margin:10px 0;
-  border:none;
+  border:0;
   border-radius:15px;
-  background:#eef3ff;
+  padding:15px;
+  margin:8px 0;
+  background:#edf2ff;
   font-size:18px;
   font-weight:bold;
   cursor:pointer;
 }
 
-.answer:hover{
-  background:#dbe5ff;
+.answer:active{
+  transform:scale(.98);
 }
 
 .answer:disabled{
-  cursor:not-allowed;
-  opacity:.7;
+  opacity:.65;
 }
 
 #feedback{
   min-height:65px;
+  margin-top:15px;
   font-size:18px;
   font-weight:bold;
-  margin-top:15px;
+  line-height:1.4;
 }
 
 #result{
   display:none;
-  font-size:24px;
+  font-size:23px;
   font-weight:bold;
+  line-height:1.6;
 }
 
 .play{
-  padding:14px 25px;
-  border:none;
+  border:0;
   border-radius:15px;
+  padding:14px 25px;
   background:#6c5ce7;
   color:white;
   font-size:18px;
@@ -132,7 +138,7 @@ h1{
 
 <body>
 
-<div class="container">
+<div class="box">
 
 <h1>🧠 MINI BRAIN TEST</h1>
 
@@ -141,12 +147,12 @@ h1{
 </div>
 
 <div class="subtitle">
-Berpikir dulu sebelum menjawab! 😈
+Jangan terburu-buru menjawab! 😈
 </div>
 
-<div class="lights">
-  <div id="redLight" class="light red"></div>
-  <div id="greenLight" class="light green"></div>
+<div class="lamps">
+<div id="green" class="lamp green"></div>
+<div id="red" class="lamp red"></div>
 </div>
 
 <div id="game">
@@ -155,10 +161,10 @@ Berpikir dulu sebelum menjawab! 😈
 
 <div id="question"></div>
 
-<button class="answer" onclick="answer(0)" id="a0"></button>
-<button class="answer" onclick="answer(1)" id="a1"></button>
-<button class="answer" onclick="answer(2)" id="a2"></button>
-<button class="answer" onclick="answer(3)" id="a3"></button>
+<button class="answer" id="a0" onclick="jawab(0)"></button>
+<button class="answer" id="a1" onclick="jawab(1)"></button>
+<button class="answer" id="a2" onclick="jawab(2)"></button>
+<button class="answer" id="a3" onclick="jawab(3)"></button>
 
 <div id="feedback">
 Pilih jawabanmu 👇
@@ -172,122 +178,335 @@ Pilih jawabanmu 👇
 
 <script>
 
-const qs = [
+const soal = [
 
 [
-"Ayah memiliki 5 anak. Anak pertama bernama Satu, anak kedua Dua, anak ketiga Tiga, anak keempat Empat. Siapa nama anak kelima?",
-["Lima","Satu","Ayah","Tidak diketahui"],2
+"Kamu menyalip orang yang berada di posisi kedua. Sekarang kamu berada di posisi?",
+["Pertama","Kedua","Ketiga","Keempat"],
+1
 ],
 
 [
-"Seorang petani memiliki 15 kambing. Semua kecuali 6 kambing pergi. Berapa kambing yang tersisa?",
-["6","9","15","0"],0
+"Semua kecuali 6 kambing pergi dari sebuah kandang yang berisi 15 kambing. Berapa kambing yang tersisa?",
+["6","9","15","0"],
+0
 ],
 
 [
 "Berapa bulan dalam setahun yang memiliki 28 hari?",
-["1","2","6","12"],3
+["1","2","6","12"],
+3
 ],
 
 [
-"Kamu memiliki 5 permen. Kamu mengambil 2 permen. Berapa permen yang kamu miliki?",
-["2","3","5","7"],1
+"Kamu memiliki 5 permen dan mengambil 2 permen. Berapa permen yang kamu miliki?",
+["2","3","5","7"],
+1
 ],
 
 [
-"Seekor ayam jantan bertelur di atas atap. Telurnya jatuh ke arah mana?",
-["Kiri","Kanan","Depan","Ayam jantan tidak bertelur"],3
+"Seekor ayam jantan bertelur di atas atap. Telurnya jatuh ke mana?",
+["Kiri","Kanan","Depan","Ayam jantan tidak bertelur"],
+3
 ],
 
 [
-"Angka berikutnya: 3, 6, 12, 24, ...?",
-["30","36","48","50"],2
+"Angka berikutnya: 2, 4, 8, 16, ...?",
+["20","24","30","32"],
+3
 ],
 
 [
-"Jika hari ini Jumat, 10 hari lagi hari apa?",
-["Senin","Selasa","Minggu","Rabu"],1
+"Jika hari ini Jumat, 10 hari lagi adalah hari?",
+["Minggu","Senin","Selasa","Rabu"],
+1
 ],
 
 [
-"Mana yang berbeda: 2, 4, 6, 8, 11, 12?",
-["4","8","11","12"],2
+"Mana yang berbeda dari angka berikut: 2, 4, 6, 8, 11, 12?",
+["4","8","11","12"],
+2
 ],
 
 [
 "Apa yang semakin diambil justru semakin besar?",
-["Lubang","Batu","Air","Kertas"],0
+["Lubang","Batu","Air","Kertas"],
+0
 ],
 
 [
-"Ada 5 burung di pohon. Seorang pemburu menembak satu. Berapa burung yang tersisa di pohon?",
-["4","5","1","0"],3
+"Ada 5 burung di pohon. Satu ditembak. Berapa burung yang masih berada di pohon?",
+["4","5","1","0"],
+3
 ],
 
 [
-"Seorang pria berdiri di tengah hujan tanpa payung, tetapi rambutnya tidak basah. Mengapa?",
-["Hujannya sedikit","Dia botak","Dia berlari","Dia berada di rumah"],1
+"Seorang pria kehujanan tanpa payung, tetapi rambutnya tidak basah. Mengapa?",
+["Hujannya sedikit","Dia botak","Dia berlari","Dia berada di rumah"],
+1
 ],
 
 [
 "Mana yang lebih berat: 1 kg kapas atau 1 kg besi?",
-["Kapas","Besi","Sama berat","Tergantung ukurannya"],2
+["Kapas","Besi","Sama berat","Tidak tahu"],
+2
 ],
 
 [
-"Jika 5 mesin membuat 5 barang dalam 5 menit, berapa menit 100 mesin membuat 100 barang?",
-["5 menit","20 menit","100 menit","500 menit"],0
+"5 mesin membuat 5 barang dalam 5 menit. Berapa menit yang diperlukan 100 mesin untuk membuat 100 barang?",
+["5 menit","20 menit","100 menit","500 menit"],
+0
 ],
 
 [
-"Kamu masuk ruangan gelap. Ada lilin, lampu, dan kompor. Kamu punya satu korek. Apa yang dinyalakan pertama?",
-["Lilin","Lampu","Kompor","Korek"],3
+"Kamu berada di ruangan gelap. Ada lilin, lampu dan kompor. Kamu hanya punya satu korek. Apa yang dinyalakan pertama?",
+["Lilin","Lampu","Kompor","Korek"],
+3
 ],
 
 [
-"Dokter memberi 3 pil. Minum satu pil setiap 30 menit. Berapa lama sampai semua pil diminum?",
-["30 menit","60 menit","90 menit","120 menit"],1
+"Dokter memberi 3 pil. Kamu harus minum satu pil setiap 30 menit. Berapa lama sampai semua pil diminum?",
+["30 menit","60 menit","90 menit","120 menit"],
+1
 ],
 
 [
-"Sebuah pesawat jatuh di perbatasan dua negara. Di mana korban yang selamat dikuburkan?",
-["Negara pertama","Negara kedua","Di perbatasan","Korban selamat tidak dikuburkan"],3
+"Pesawat jatuh di perbatasan dua negara. Di mana korban yang selamat dikuburkan?",
+["Negara pertama","Negara kedua","Di perbatasan","Korban selamat tidak dikuburkan"],
+3
 ],
 
 [
-"Seorang ibu memiliki 4 anak perempuan. Setiap anak perempuan memiliki satu saudara laki-laki. Berapa jumlah anak?",
-["4","5","8","9"],1
+"Seorang ayah memiliki 4 anak perempuan. Setiap anak memiliki satu saudara laki-laki. Berapa jumlah anak ayah tersebut?",
+["4","5","8","9"],
+1
 ],
 
 [
-"Jika kamu menyalip pelari di posisi ketiga, kamu berada di posisi?",
-["Kedua","Ketiga","Keempat","Pertama"],1
+"Kamu menyalip pelari di posisi ketiga. Sekarang kamu berada di posisi?",
+["Kedua","Ketiga","Keempat","Pertama"],
+1
 ],
 
 [
 "Angka berikutnya: 1, 1, 2, 3, 5, 8, ...?",
-["11","12","13","15"],2
+["11","12","13","15"],
+2
 ],
 
 [
-"Ada rumah yang keempat sisinya menghadap ke selatan. Seekor beruang lewat. Apa warna beruang?",
-["Cokelat","Hitam","Putih","Abu-abu"],2
+"Rumah memiliki empat sisi yang semuanya menghadap ke selatan. Seekor beruang lewat. Apa warna beruang itu?",
+["Cokelat","Hitam","Putih","Abu-abu"],
+2
 ],
 
 [
-"Apa yang punya leher tetapi tidak punya kepala?",
-["Baju","Botol","Meja","Kursi"],1
+"Apa yang memiliki leher tetapi tidak memiliki kepala?",
+["Baju","Botol","Meja","Kursi"],
+1
 ],
 
 [
 "Apa yang selalu datang tetapi tidak pernah sampai?",
-["Besok","Kemarin","Hari ini","Malam"],0
+["Besok","Kemarin","Hari ini","Malam"],
+0
 ],
 
 [
-"Jika 3 kucing menangkap 3 tikus dalam 3 menit, berapa kucing yang dibutuhkan untuk menangkap 100 tikus dalam 100 menit?",
-["3","10","33","100"],0
+"Jika 3 kucing menangkap 3 tikus dalam 3 menit, berapa kucing yang diperlukan untuk menangkap 100 tikus dalam 100 menit?",
+["3","10","33","100"],
+0
 ],
 
 [
-"Seorang
+"Seorang tukang cukur mencukur banyak orang setiap hari, tetapi dirinya tetap berjanggut. Mengapa?",
+["Dia dokter","Dia mencukur orang lain","Dia tidak punya pisau","Dia petani"],
+1
+],
+
+[
+"Apa yang bisa mengelilingi dunia tetapi tetap berada di satu sudut?",
+["Perangko","Pesawat","Kapal","Peta"],
+0
+],
+
+[
+"Seorang ayah berusia 40 tahun dan anaknya 10 tahun. Berapa tahun lagi umur ayah menjadi dua kali umur anak?",
+["10","15","20","30"],
+2
+],
+
+[
+"Ada 7 lilin menyala. Angin meniup 2 lilin sampai mati. Berapa lilin yang masih menyala?",
+["5","7","2","0"],
+0
+],
+
+[
+"5 orang berjabat tangan satu kali dengan setiap orang lainnya. Berapa jumlah jabat tangan?",
+["5","10","15","20"],
+1
+],
+
+[
+"Seorang ibu membeli 6 telur. Semua kecuali 2 telur pecah. Berapa telur yang tidak pecah?",
+["2","4","6","0"],
+0
+],
+
+[
+"Seorang ayah dan anak mengalami kecelakaan. Ayah meninggal. Dokter berkata, 'Dia anak saya.' Siapa dokter itu?",
+["Ayahnya","Ibunya","Kakaknya","Pamannya"],
+1
+]
+
+];
+
+let nomor = 0;
+let skor = 0;
+
+function bicara(teks){
+
+if("speechSynthesis" in window){
+
+speechSynthesis.cancel();
+
+let suara = new SpeechSynthesisUtterance(teks);
+
+suara.lang = "id-ID";
+suara.rate = 0.9;
+suara.pitch = 1;
+
+speechSynthesis.speak(suara);
+
+}
+
+}
+
+function tampil(){
+
+document.getElementById("progress").innerText =
+"Soal " + (nomor + 1) + " dari " + soal.length;
+
+document.getElementById("question").innerText =
+soal[nomor][0];
+
+for(let i=0;i<4;i++){
+
+document.getElementById("a"+i).innerText =
+soal[nomor][1][i];
+
+document.getElementById("a"+i).disabled = false;
+
+}
+
+document.getElementById("feedback").innerHTML =
+"Pilih jawabanmu 👇";
+
+document.getElementById("green").classList.remove("on");
+
+document.getElementById("red").classList.remove("on");
+
+}
+
+function jawab(pilihan){
+
+let benar = soal[nomor][2];
+
+for(let i=0;i<4;i++){
+
+document.getElementById("a"+i).disabled = true;
+
+}
+
+if(pilihan === benar){
+
+skor++;
+
+document.getElementById("green").classList.add("on");
+
+document.getElementById("feedback").innerHTML =
+"🟢 BENAR! Hebat sekali! 🧠🔥";
+
+bicara("Benar! Hebat sekali!");
+
+}else{
+
+document.getElementById("red").classList.add("on");
+
+let jawabanBenar = soal[nomor][1][benar];
+
+document.getElementById("feedback").innerHTML =
+"🔴 SALAH!<br>" +
+"Jawaban yang benar: <b>" +
+jawabanBenar +
+"</b> 💡";
+
+bicara("Salah. Jawaban yang benar adalah " + jawabanBenar);
+
+}
+
+setTimeout(function(){
+
+nomor++;
+
+if(nomor < soal.length){
+
+tampil();
+
+}else{
+
+selesai();
+
+}
+
+},2200);
+
+}
+
+function selesai(){
+
+let nilai = Math.round(skor / soal.length * 100);
+
+document.getElementById("game").style.display = "none";
+
+document.getElementById("result").style.display = "block";
+
+let pesan;
+
+if(nilai === 100){
+
+pesan = "🏆 LUAR BIASA! OTAKMU TAJAM SEKALI!";
+
+}else if(nilai >= 80){
+
+pesan = "🔥 HEBAT! Hampir sempurna!";
+
+}else if(nilai >= 60){
+
+pesan = "😎 Lumayan! Coba lagi!";
+
+}else{
+
+pesan = "😂 Jangan menyerah! Coba lagi!";
+
+}
+
+document.getElementById("result").innerHTML =
+
+"🎊 TES SELESAI! 🎊<br><br>" +
+"🧠 SKOR: <b>" + nilai + "/100</b><br><br>" +
+"Jawaban benar: " + skor + " dari " + soal.length +
+"<br><br>" +
+pesan +
+"<br><br>" +
+"<button class='play' onclick='location.reload()'>🔄 MAIN LAGI</button>";
+
+}
+
+tampil();
+
+</script>
+
+</body>
+</html>
